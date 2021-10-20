@@ -60,10 +60,10 @@ module "gke" {
 
 
 
-resource "google_storage_bucket" "work-examples" {
-  name          = "work-examples project bucket"
-  location      = "EU"
-  force_destroy = true
+#resource "google_storage_bucket" "work-examples" {
+#  name          = "work-examples project bucket"
+#  location      = "EU"
+#  force_destroy = true
 
-  uniform_bucket_level_access = true
-}
+#  uniform_bucket_level_access = true
+#}
