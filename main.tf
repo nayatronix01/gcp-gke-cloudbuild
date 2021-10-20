@@ -60,4 +60,10 @@ module "gke" {
 
 
 
+resource "google_storage_bucket" "terraform" {
+  name          = "Terraform Bucket"
+  location      = "EU"
+  force_destroy = true
 
+  uniform_bucket_level_access = true
+}
