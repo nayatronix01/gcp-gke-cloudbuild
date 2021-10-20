@@ -47,4 +47,4 @@ artifacts:
 options:
   #logging: NONE
   logging: CLOUD_LOGGING_ONLY
-  logsBucket: 'gs://gcp-gke-cloudbuild'
+  build.logsBucket: 'gs://gcp-gke-cloudbuild'
