@@ -42,9 +42,8 @@ steps:
   - tfplan
 artifacts:
   objects:
-    location: 'gs://${_ARTIFACT_BUCKET_NAME}/terraform/cloudbuild/apply/$BUILD_ID'
+    #location: 'gs://${_ARTIFACT_BUCKET_NAME}/terraform/cloudbuild/apply/$BUILD_ID'
+    location: 'gs://terraform/cloudbuild/apply/$BUILD_ID'
     paths: ['cloudbuild-tf-apply.yaml', 'tfplan']
 options:
-  #logging: NONE
   logging: CLOUD_LOGGING_ONLY
-  #build.logsBucket: 'gs://gcp-gke-cloudbuild'
