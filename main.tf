@@ -59,7 +59,7 @@ module "gke" {
 
 
 
-data "google_compute_default_service_account" "cloudbuild.gserviceaccount.com" {
+data "google_compute_default_service_account" "cloudbuild" {
 }
 
 resource "google_service_account" "sa" {
