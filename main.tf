@@ -58,4 +58,7 @@ module "gke" {
 }
 
 
-
+resource "google_service_account" "service_account" {
+  account_id   = "terraform-service-account"
+  display_name = "Terraform Service Account"
+}
