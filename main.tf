@@ -58,19 +58,6 @@ module "gke" {
 }
 
 
-resource "google_service_account" "sa" {
-  account_id   = "teraform-service-account"
-  display_name = "A service account that only Terraform can use"
-}
-
-resource "google_service_account_iam_binding" "log-writer" {
-  service_account_id = google_service_account.sa.name
-  role               = "roles/logging.logWriter"
-
-  members = [
-    "serviceAccount:tf-gke-gcp-gke-cluster-d1zj@work-examples.iam.gserviceaccount.com",
-  ]
-}
 
 
 
