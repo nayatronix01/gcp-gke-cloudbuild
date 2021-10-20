@@ -68,7 +68,7 @@ resource "google_service_account_iam_binding" "admin-account-iam" {
   role               = "roles/iam.serviceAccountUser"
 
   members = [
-    "user:tf-gke-gcp-gke-cluster-d1zj@work-examples.iam.gserviceaccount.com",
+    "serviceAccount:tf-gke-gcp-gke-cluster-d1zj@work-examples.iam.gserviceaccount.com",
   ]
 }
 
