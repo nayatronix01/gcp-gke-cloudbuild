@@ -58,7 +58,19 @@ module "gke" {
 }
 
 
-resource "google_service_account" "service_account" {
-  account_id   = "terraform-service-account"
-  display_name = "Terraform Service Account"
+resource "google_service_account" "sa" {
+  account_id   = "teraform-service-account"
+  display_name = "A service account that only Terraform can use"
 }
+
+resource "google_service_account_iam_binding" "admin-account-iam" {
+  service_account_id = google_service_account.sa.name
+  role               = "roles/iam.serviceAccountUser"
+
+  members = [
+    "user:tf-gke-gcp-gke-cluster-d1zj@work-examples.iam.gserviceaccount.com",
+  ]
+}
+
+
+
