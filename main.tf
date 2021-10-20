@@ -56,3 +56,27 @@ module "gke" {
     },
   ]
 }
+
+
+
+
+data "google_compute_default_service_account" "default" {
+}
+
+resource "google_service_account" "sa" {
+  account_id   = "my-service-account"
+  display_name = "A service account that Terraform can use"
+}
+
+resource "google_service_account_iam_member" "admin-account-iam" {
+  service_account_id = google_service_account.sa.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "user:nayatronix@pm.me"
+}
+
+# Allow SA service account use the default GCE account
+resource "google_service_account_iam_member" "gce-default-account-iam" {
+  service_account_id = data.google_compute_default_service_account.default.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.sa.email}"
+}
