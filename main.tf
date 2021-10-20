@@ -57,4 +57,16 @@ module "gke" {
   ]
 }
 
+resource "google_cloudbuild_trigger" "on-push" {
+  name    = format("on-push-%s", var.repo_name)
+  github {
+    owner = var.repo_owner
+    name  = var.repo_name
+    push {
+      branch = ".*"
+    }
+  }
 
+  filename   = "cloudbuild.yaml"
+  provider   = google-beta
+}
