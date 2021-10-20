@@ -30,8 +30,8 @@ steps:
 - name: hashicorp/terraform
   args:
   - plan
-  #- -input=false
-  - -out=tfplan
+  - -input=false
+  #- -out=tfplan
 # terraform apply -auto-approve -input=false tfplan
 #- name: gcr.io/$PROJECT_ID/terraform
 - name: hashicorp/terraform
@@ -39,7 +39,7 @@ steps:
   - apply
   - -auto-approve
   - -input=false
-  - tfplan
+  #- tfplan
 artifacts:
   objects:
     location: 'gs://${_ARTIFACT_BUCKET_NAME}/terraform/cloudbuild/apply/$BUILD_ID'
