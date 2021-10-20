@@ -16,7 +16,7 @@ timeout: 1200s
 steps:
 - name: 'bash'
   logsBucket: 'gs://work-examples-bucket'
-  serviceAccount: 'projects/work-examples/serviceAccounts/service-1044070725201@gcp-sa-pubsub.iam.gserviceaccount.com'
+  #serviceAccount: 'projects/work-examples/serviceAccounts/service-1044070725201@gcp-sa-pubsub.iam.gserviceaccount.com'
 # terraform init -input=false
 - name: gcr.io/$PROJECT_ID/terraform
   args:
