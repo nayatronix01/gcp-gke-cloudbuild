@@ -46,4 +46,3 @@ artifacts:
     paths: ['cloudbuild-tf-apply.yaml', 'tfplan']
 options:
   logging: CLOUD_LOGGING_ONLY
-  #logging: NONE
