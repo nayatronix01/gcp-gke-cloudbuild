@@ -60,8 +60,8 @@ module "gke" {
 
 
 
-data "google_compute_default_service_account" "default" {
-}
+#data "google_compute_default_service_account" "default" {
+#}
 
 resource "google_service_account" "sa" {
   account_id   = "tf-service-account"
