@@ -30,7 +30,7 @@ steps:
 - name: hashicorp/terraform
   args:
   - plan
-  - -input=false
+  #- -input=false
   - -out=tfplan
 # terraform apply -auto-approve -input=false tfplan
 #- name: gcr.io/$PROJECT_ID/terraform
