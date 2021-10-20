@@ -57,16 +57,112 @@ module "gke" {
   ]
 }
 
-resource "google_cloudbuild_trigger" "on-push" {
-  name    = format("on-push-%s", var.repo_name)
-  github {
-    owner = var.repo_owner
-    name  = var.repo_name
-    push {
-      branch = ".*"
-    }
+
+
+
+resource "google_cloudbuild_trigger" "filename-trigger" {
+  trigger_template {
+    branch_name = "master"
+    repo_name   = "my-repo"
   }
 
-  filename   = "cloudbuild.yaml"
-  provider   = google-beta
+  substitutions = {
+    _FOO = "bar"
+    _BAZ = "qux"
+  }
+
+  filename = "cloudbuild.yaml"
 }
+
+
+
+resource "google_cloudbuild_trigger" "build-trigger" {
+  trigger_template {
+    branch_name = "master"
+    repo_name   = "my-repo"
+  }
+
+  build {
+    step {
+      name = "gcr.io/cloud-builders/gsutil"
+      args = ["cp", "gs://mybucket/remotefile.zip", "localfile.zip"]
+      timeout = "120s"
+    }
+
+    source {
+      storage_source {
+        bucket = "mybucket"
+        object = "source_code.tar.gz"
+      }
+    }
+    tags = ["build", "newFeature"]
+    substitutions = {
+      _FOO = "bar"
+      _BAZ = "qux"
+    }
+    queue_ttl = "20s"
+    logs_bucket = "gs://mybucket/logs"
+    secret {
+      kms_key_name = "projects/myProject/locations/global/keyRings/keyring-name/cryptoKeys/key-name"
+      secret_env = {
+        PASSWORD = "ZW5jcnlwdGVkLXBhc3N3b3JkCg=="
+      }
+    }
+    artifacts {
+      images = ["gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA"]
+      objects {
+        location = "gs://bucket/path/to/somewhere/"
+        paths = ["path"]
+      }
+    }
+    options {
+      source_provenance_hash = ["MD5"]
+      requested_verify_option = "VERIFIED"
+      machine_type = "N1_HIGHCPU_8"
+      disk_size_gb = 100
+      substitution_option = "ALLOW_LOOSE"
+      dynamic_substitutions = true
+      log_streaming_option = "STREAM_OFF"
+      worker_pool = "pool"
+      logging = "LEGACY"
+      env = ["ekey = evalue"]
+      secret_env = ["secretenv = svalue"]
+      volumes {
+        name = "v1"
+        path = "v1"
+      }
+    }
+  }  
+}
+
+
+
+resource "google_cloudbuild_trigger" "service-account-trigger" {
+  trigger_template {
+    branch_name = "master"
+    repo_name   = "my-repo"
+  }
+
+  service_account = google_service_account.cloudbuild_service_account.id
+  filename        = "cloudbuild.yaml"
+  depends_on = [
+    google_project_iam_member.act_as,
+    google_project_iam_member.logs_writer
+  ]
+}
+
+resource "google_service_account" "cloudbuild_service_account" {
+  account_id = "my-service-account"
+}
+
+resource "google_project_iam_member" "act_as" {
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+}
+
+resource "google_project_iam_member" "logs_writer" {
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+}
+
+
