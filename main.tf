@@ -64,6 +64,7 @@ resource "google_storage_bucket" "terraform" {
   name          = "Terraform Bucket"
   location      = "EU"
   force_destroy = true
+  storage_class = "STANDARD"
 
   uniform_bucket_level_access = true
 }
