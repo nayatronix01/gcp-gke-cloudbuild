@@ -14,9 +14,6 @@
 
 timeout: 1200s
 steps:
-#- name: 'bash'
-  #logsBucket: 'gs://work-examples-bucket'
-  #serviceAccount: 'projects/work-examples/serviceAccounts/service-1044070725201@gcp-sa-pubsub.iam.gserviceaccount.com'
 # terraform init -input=false
 - name: gcr.io/$PROJECT_ID/terraform
   args:
@@ -43,3 +40,5 @@ artifacts:
   objects:
     location: 'gs://${_ARTIFACT_BUCKET_NAME}/terraform/cloudbuild/apply/$BUILD_ID'
     paths: ['cloudbuild-tf-apply.yaml', 'tfplan']
+options:
+  logging: CLOUD_LOGGING_ONLY
