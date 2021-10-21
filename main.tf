@@ -91,7 +91,7 @@ resource "google_project_iam_member" "logs_writer" {
 }
 
 resource "google_storage_bucket" "work-examples" {
-  name          = "work-examples project bucket"
+  name          = "work-examples-project-bucket"
   location      = "EU"
   force_destroy = true
   project = var.project_id
