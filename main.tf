@@ -70,7 +70,7 @@ resource "google_cloudbuild_trigger" "gcp-gke-cloudbuild" {
 
 #  filename   = "cloudbuild.yaml"
 #  provider   = google-beta
-   provider   = google
+#   provider   = google
 }
 
 
