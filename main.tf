@@ -93,25 +93,25 @@ resource "google_project_iam_member" "logs_writer" {
 }
 
 resource "google_project_iam_member" "cloud_build_service_account" {
-  role    = "roles/"
+  role    = "roles/cloudbuild.builds.builder"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "kubernetes_engine_developer" {
-  role    = "roles/"
+  role    = "roles/container.developer"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "project_iam_admin" {
-  role    = "roles/"
+  role    = "roles/resourcemanager.projectIamAdmin"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "secret_manager_secret_accessor" {
-  role    = "roles/"
+  role    = "roles/secretmanager.secretAccessor"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
   project = var.project_id
 }
