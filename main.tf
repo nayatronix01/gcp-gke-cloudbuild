@@ -75,26 +75,26 @@ resource "google_cloudbuild_trigger" "service-account-trigger" {
 resource "google_service_account" "cloudbuild_service_account" {
   account_id   = "cloudbuild-sa"
   display_name = "CloudBuild Service Account"
-  project = var.project
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "act_as" {
   role    = "roles/iam.serviceAccountUser"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
-  project = var.project
+  project = var.project_id
 }
 
 resource "google_project_iam_member" "logs_writer" {
   role    = "roles/logging.logWriter"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
-  project = var.project
+  project = var.project_id
 }
 
 resource "google_storage_bucket" "work-examples" {
   name          = "work-examples project bucket"
   location      = "EU"
   force_destroy = true
-  project = var.project
+  project = var.project_id
 
   uniform_bucket_level_access = true
 }
