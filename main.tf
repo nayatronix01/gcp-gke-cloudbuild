@@ -63,7 +63,8 @@ resource "google_cloudbuild_trigger" "service-account-trigger" {
     branch_name = ".*"
     repo_name   = "https://github.com/nayatronix01/gcp-gke-cloudbuild.git"
   }
-  
+ 
+#
   name    = "gcp-gke-cloudbuild"
   project = var.project_id
   #service_account = google_service_account.cloudbuild_service_account.id
