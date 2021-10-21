@@ -61,9 +61,10 @@ module "gke" {
 resource "google_cloudbuild_trigger" "service-account-trigger" {
   trigger_template {
     branch_name = "main"
-    repo_name   = "gcp-gke-cloudbuild"
+    repo_name   = "nayatronix01/gcp-gke-cloudbuild"
   }
   
+  name    = "gcp-gke-cloudbuild"
   project = var.project_id
   #service_account = google_service_account.cloudbuild_service_account.id
   filename        = "cloudbuild.yaml"
@@ -87,6 +88,30 @@ resource "google_project_iam_member" "act_as" {
 
 resource "google_project_iam_member" "logs_writer" {
   role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "cloud_build_service_account" {
+  role    = "roles/"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "kubernetes_engine_developer" {
+  role    = "roles/"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "project_iam_admin" {
+  role    = "roles/"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  project = var.project_id
+}
+
+resource "google_project_iam_member" "secret_manager_secret_accessor" {
+  role    = "roles/"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
   project = var.project_id
 }
