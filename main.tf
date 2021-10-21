@@ -60,8 +60,8 @@ module "gke" {
 
 resource "google_cloudbuild_trigger" "service-account-trigger" {
   trigger_template {
-    branch_name = "main"
-    repo_name   = "nayatronix01/gcp-gke-cloudbuild"
+    branch_name = ".*"
+    repo_name   = "https://github.com/nayatronix01/gcp-gke-cloudbuild.git"
   }
   
   name    = "gcp-gke-cloudbuild"
