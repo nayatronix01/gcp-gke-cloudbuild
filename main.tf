@@ -58,6 +58,19 @@ module "gke" {
 }
 
 
+resource "google_cloudbuild_trigger" "gcp-gke-cloudbuild" {
+  name    = format("gcp-gke-cloudbuild-%s", var.repo_name)
+  github {
+    owner = var.repo_owner
+    name  = var.repo_name
+    push {
+      branch = ".*"
+    }
+  }
+
+  filename   = "cloudbuild.yaml"
+  provider   = google-beta
+}
 
 
 #resource "google_storage_bucket" "work-examples" {

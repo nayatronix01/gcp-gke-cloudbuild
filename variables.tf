@@ -31,4 +31,18 @@ variable "ip_range_services_name" {
   default     = "ip-range-services"
 }
 
+variable "repo_owner" {
+  description = "GitHub repo owner"
+  default     = "nayatronix01"
+}
+
+
+variable "repo_name" {
+  description = "GitHub repo name"
+  default     = "gcp-gke-cloudbuild"
+}
+
+
+
+
 
