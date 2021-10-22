@@ -59,12 +59,22 @@ module "gke" {
 
 
 resource "google_cloudbuild_trigger" "service-account-trigger" {
-  trigger_template {
-    branch_name = ".*"
-    repo_name   = "https://github.com/nayatronix01/gcp-gke-cloudbuild.git"
-  }
+  
+  #trigger_template {
+  #  branch_name = ".*"
+  #  repo_name   = "https://github.com/nayatronix01/gcp-gke-cloudbuild.git"
+  #}
  
+  github {
+    owner = "${var.world_repo_owner}"
+    name = "${var.world_repo_name}"
+    push {
+      branch = "^main$"
+    }
+  }
+
   name    = "gcp-gke-cloudbuild"
+  provider = google-beta
   project = var.project_id
   #service_account = google_service_account.cloudbuild_service_account.id
   filename        = "cloudbuild.yaml"
@@ -74,45 +84,45 @@ resource "google_cloudbuild_trigger" "service-account-trigger" {
   ]
 }
 
-resource "google_service_account" "cloudbuild_service_account" {
+resource "google_service_account" "cluster_service_account" {
   account_id   = "cloudbuild-sa"
-  display_name = "CloudBuild Service Account"
+  display_name = "Terraform-managed service account for cluster gcp-gke-cluster-prod"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "act_as" {
   role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  member  = "serviceAccount:${google_service_account.cluster_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "logs_writer" {
   role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  member  = "serviceAccount:${google_service_account.cluster_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "cloud_build_service_account" {
   role    = "roles/cloudbuild.builds.builder"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  member  = "serviceAccount:${google_service_account.cluster_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "kubernetes_engine_developer" {
   role    = "roles/container.developer"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  member  = "serviceAccount:${google_service_account.cluster_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "project_iam_admin" {
   role    = "roles/resourcemanager.projectIamAdmin"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  member  = "serviceAccount:${google_service_account.cluster_service_account.email}"
   project = var.project_id
 }
 
 resource "google_project_iam_member" "secret_manager_secret_accessor" {
   role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+  member  = "serviceAccount:${google_service_account.cluster_service_account.email}"
   project = var.project_id
 }
 
