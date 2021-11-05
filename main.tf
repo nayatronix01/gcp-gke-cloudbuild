@@ -58,7 +58,7 @@ module "gke" {
 }
 
 
-resource "google_cloudbuild_trigger" "service-account-trigger" {
+resource "google_cloudbuild_trigger" "gcp-gke-cloudbuild" {
   
   #trigger_template {
   #  branch_name = ".*"
@@ -83,6 +83,40 @@ resource "google_cloudbuild_trigger" "service-account-trigger" {
     google_project_iam_member.logs_writer
   ]
 }
+
+
+
+
+resource "google_cloudbuild_trigger" "kube-prometheus-stack" {
+
+  #trigger_template {
+  #  branch_name = ".*"
+  #  repo_name   = "https://github.com/nayatronix01/gcp-gke-cloudbuild.git"
+  #}
+
+  github {
+    owner = "${var.world_repo_owner}"
+    name = "${var.world_repo_name}"
+    push {
+      branch = "^staging"
+    }
+  }
+
+  name    = "kube-prometheus-stack"
+  provider = google-beta
+  project = var.project_id
+  #service_account = google_service_account.cloudbuild_service_account.id
+  filename        = "cloudbuild.yaml"
+  depends_on = [
+    google_project_iam_member.act_as,
+    google_project_iam_member.logs_writer
+  ]
+}
+
+
+
+
+
 
 resource "google_service_account" "cluster_service_account" {
   account_id   = "cloudbuild-sa"
